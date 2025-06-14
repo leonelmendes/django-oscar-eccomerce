@@ -1,6 +1,9 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from .models import ClienteProfile, FornecedorProfile
+
+
+User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -18,6 +21,8 @@ class ClienteRegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user_data = validated_data.pop('user')
         user = User.objects.create_user(**user_data)
+        user.tipo = 'cliente' 
+        user.save()
         cliente = ClienteProfile.objects.create(user=user, **validated_data)
         return cliente
 
@@ -31,5 +36,7 @@ class FornecedorRegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user_data = validated_data.pop('user')
         user = User.objects.create_user(**user_data)
+        user.is_staff = True
+        user.save() 
         fornecedor = FornecedorProfile.objects.create(user=user, **validated_data)
         return fornecedor

@@ -137,6 +137,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'PBE.wsgi.application'
 
+# Indica que o Django Oscar para usar o seu modelo Product personalizado no lugar do original.
+OSCAR_PRODUCT_MODEL = 'catalogue.Product'
+
+# Custom user model
+AUTH_USER_MODEL = 'users.User'
+
+
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
