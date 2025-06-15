@@ -79,7 +79,7 @@ INSTALLED_APPS = [
     'treebeard',
     'sorl.thumbnail',   # Default thumbnail backend, can be replaced
     'django_tables2',
-    
+    'produtos',
     'users',
     'rest_framework',
     'rest_framework_simplejwt',
