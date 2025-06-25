@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class DashboardFornecedorConfig(AppConfig):
+class FornecedoresConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'dashboard_fornecedor'
+    name = 'fornecedores'

@@ -83,7 +83,6 @@ INSTALLED_APPS = [
      # Apps próprios
     'users',
     'produtos',
-    'dashboard_fornecedor',
 
     # APIs
     'rest_framework',
