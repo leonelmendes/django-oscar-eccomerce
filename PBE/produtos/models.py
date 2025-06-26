@@ -7,6 +7,13 @@ class Categoria(models.Model):
 
     def __str__(self):
         return self.nome
+UNIDADES = [
+    ('m2', 'Metro quadrado (m²)'),
+    ('m3', 'Metro cúbico (m³)'),
+    ('saco', 'Saco'),
+    ('kg', 'Quilograma (kg)'),
+    ('unid', 'Unidade'),
+]
 
 class Produto(models.Model):
     nome = models.CharField(max_length=255)
@@ -14,7 +21,8 @@ class Produto(models.Model):
     imagem = models.ImageField(upload_to='produtos/')
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     preco = models.DecimalField(max_digits=10, decimal_places=2)
-    unidade = models.CharField(max_length=20)
+    unidade_venda = models.CharField(max_length=10, choices=UNIDADES)
+    quantidade = models.PositiveIntegerField(default=0)
     fornecedor = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,

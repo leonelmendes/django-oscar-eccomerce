@@ -1,0 +1,9 @@
+{% extends "oscar/dashboard/base.html" %}
+{% block dashboard_content %}
+<h2>Eliminar Produto</h2>
+<p>Tem a certeza que quer eliminar "{{ object }}"?</p>
+<form method="post">{% csrf_token %}
+  <button class="btn btn-danger">Sim, eliminar</button>
+  <a href="{% url 'fornecedores:produto-list' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "oscar/dashboard/fornecedores/base.html" %}
+
+{% block dashboard_content %}
+<div class="page-header">
+    <h1>Dashboard do Fornecedor</h1>
+</div>
+
+<div class="row">
+    <!-- Card de Produtos -->
+    <div class="col-md-4">
+        <div class="card border-primary mb-4">
+            <div class="card-header bg-primary text-white">
+                <i class="fas fa-boxes"></i> Meus Produtos
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ produtos_count }} Produtos</h5>
+                <a href="{% url 'fornecedores:produto-list' %}" class="btn btn-primary">
+                    Gerenciar Produtos
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card de Encomendas -->
+    <div class="col-md-4">
+        <div class="card border-success mb-4">
+            <div class="card-header bg-success text-white">
+                <i class="fas fa-shopping-cart"></i> Encomendas
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ encomendas_count }} Encomendas</h5>
+                <a href="{% url 'fornecedores:encomenda-list' %}" class="btn btn-success">
+                    Ver Encomendas
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card de Estatísticas -->
+    <div class="col-md-4">
+        <div class="card border-info mb-4">
+            <div class="card-header bg-info text-white">
+                <i class="fas fa-chart-line"></i> Vendas
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">R$ {{ total_vendas|floatformat:2 }}</h5>
+                <a href="#" class="btn btn-info">
+                    Ver Estatísticas
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

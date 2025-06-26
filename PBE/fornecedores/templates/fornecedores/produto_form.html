@@ -1,0 +1,46 @@
+{% extends 'fornecedores/base.html' %}
+
+{% block dashboard_title %}
+    {% if object %}Editar Produto{% else %}Adicionar Produto{% endif %}
+{% endblock %}
+
+{% block dashboard_content %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header">Informações Básicas</div>
+                <div class="card-body">
+                    {{ form.as_p }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header">Imagem do Produto</div>
+                <div class="card-body">
+                    {% if object and object.imagem %}
+                    <img src="{{ object.imagem.url }}" class="img-fluid mb-3" alt="{{ object.nome }}">
+                    {% endif %}
+                    {{ form.imagem }}
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">Ações</div>
+                <div class="card-body">
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fas fa-save"></i> Salvar
+                    </button>
+                    <a href="{% url 'fornecedores:produto-list' %}" class="btn btn-secondary btn-block">
+                        <i class="fas fa-arrow-left"></i> Cancelar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}s

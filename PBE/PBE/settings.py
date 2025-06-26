@@ -10,8 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 from oscar.defaults import *
+from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -83,9 +85,48 @@ INSTALLED_APPS = [
      # Apps próprios
     'users',
     'produtos',
+    'fornecedores',
 
     # APIs
     'rest_framework',
+]
+
+def fornecedor_access_fn(user, url_name=None, namespace=None, app_name=None):
+    # só permitem mostrar esse menu a staff não-superuser
+    return user.is_authenticated and user.is_staff and not user.is_superuser
+
+OSCAR_DASHBOARD_NAVIGATION = [
+    {
+        'label': _('Dashboard'),
+        'icon': 'icon-th-list',
+        'url_name': 'dashboard:index',
+    },
+    {
+        'label': 'Fornecedores',
+        'icon': 'icon-sitemap',
+        'children': [
+            {
+                'label': 'Dashboard Fornecedor',
+                'url_name': 'fornecedores:dashboard',
+                'access_fn': fornecedor_access_fn,
+            },
+            {
+                'label': 'Meus Produtos',
+                'url_name': 'fornecedores:produto-list',
+                'access_fn': fornecedor_access_fn,
+            },
+            {
+                'label': 'Minhas Encomendas',
+                'url_name': 'fornecedores:encomenda-list',
+                'access_fn': fornecedor_access_fn,
+            },
+            {
+                'label': 'Minhas Estatísticas',
+                'url_name': 'fornecedores:estatisticas',
+                'access_fn': fornecedor_access_fn,
+            },
+        ]
+    }
 ]
 
 SITE_ID = 1
@@ -119,7 +160,9 @@ ROOT_URLCONF = 'PBE.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -135,6 +178,9 @@ TEMPLATES = [
         },
     },
 ]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 WSGI_APPLICATION = 'PBE.wsgi.application'
 
@@ -153,6 +199,8 @@ DATABASES = {
         'ATOMIC_REQUESTS': True,
     }
 }
+
+AUTH_USER_MODEL = 'users.User'
 
 
 # Password validation
@@ -196,4 +244,3 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'users.User'

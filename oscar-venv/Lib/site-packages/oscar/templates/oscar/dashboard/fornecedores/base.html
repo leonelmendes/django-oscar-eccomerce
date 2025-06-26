@@ -1,0 +1,39 @@
+{% extends "oscar/dashboard/layout.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Menu Lateral -->
+        <div class="col-md-3 col-lg-2 d-md-block sidebar dashboard-nav">
+            <div class="sidebar-sticky pt-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'fornecedores/dashboard' in request.path %}active{% endif %}" 
+                           href="{% url 'fornecedores:dashboard' %}">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'fornecedores/produtos' in request.path %}active{% endif %}" 
+                           href="{% url 'fornecedores:produto-list' %}">
+                            <i class="fas fa-box-open"></i> Meus Produtos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'fornecedores/encomendas' in request.path %}active{% endif %}" 
+                           href="{% url 'fornecedores:encomenda-list' %}">
+                            <i class="fas fa-clipboard-list"></i> Encomendas
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Conteúdo Principal -->
+        <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            {% block dashboard_content %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}

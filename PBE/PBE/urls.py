@@ -17,6 +17,7 @@ Including another URLconf
 from django.apps import apps
 from django.urls import include, path
 from django.contrib import admin
+from django.views.generic import RedirectView
 
 urlpatterns = [
      path('i18n/', include('django.conf.urls.i18n')),
@@ -27,6 +28,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('users.urls')),
     path('api/', include('produtos.urls')),
-    path('fornecedor/', include('fornecedores.urls')),
+    #path('fornecedor/', include('fornecedores.urls')),
+    path('dashboard/fornecedores/', include('fornecedores.urls', namespace='fornecedores')),
+    #path('dashboard/', RedirectView.as_view(url='/dashboard/fornecedor/', permanent=False)),
     path('', include(apps.get_app_config('oscar').urls[0])),
 ]
