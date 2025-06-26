@@ -13,6 +13,7 @@ class Fornecedor(models.Model):
     )
     nome_empresa = models.CharField(max_length=255)
     cnpj = models.CharField(max_length=18, unique=True)
+    #nif = models.CharField(max_length=18, unique=True)
     telefone = models.CharField(max_length=20)
     endereco = models.TextField()
     

@@ -17,3 +17,5 @@ class ProdutoViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         # Para PUT/DELETE garantimos via permission; leitura devolve todos
         return super().get_queryset()
+    
+    

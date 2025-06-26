@@ -7,6 +7,7 @@ class Categoria(models.Model):
 
     def __str__(self):
         return self.nome
+
 UNIDADES = [
     ('m2', 'Metro quadrado (m²)'),
     ('m3', 'Metro cúbico (m³)'),

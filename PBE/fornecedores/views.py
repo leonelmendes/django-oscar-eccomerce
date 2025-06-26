@@ -10,6 +10,7 @@ from datetime import timedelta
 from .models import Encomenda
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.utils.decorators import method_decorator
+from produtos.models import Categoria
 
 def fornecedor_required(user):
     return user.is_authenticated and hasattr(user, 'fornecedorprofile')
@@ -108,4 +109,13 @@ class EstatisticasView(LoginRequiredMixin, FornecedorRequiredMixin, TemplateView
             # Adicione mais dados conforme necessário
         })
         
+        return context
+    
+class ProdutoFormTemplate(LoginRequiredMixin, FornecedorRequiredMixin, TemplateView):
+    template_name = 'fornecedores/produto_form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        from produtos.models import Categoria
+        context["categorias"] = Categoria.objects.all()
         return context

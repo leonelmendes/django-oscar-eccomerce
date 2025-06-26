@@ -5,42 +5,83 @@
 {% endblock %}
 
 {% block dashboard_content %}
-<form method="post" enctype="multipart/form-data">
+<div class="container mt-5">
+  <h2 class="mb-4">Adicionar Produto</h2>
+
+<form id="produtoForm" enctype="multipart/form-data">
     {% csrf_token %}
     
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card mb-4">
-                <div class="card-header">Informações Básicas</div>
-                <div class="card-body">
-                    {{ form.as_p }}
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-md-4">
-            <div class="card mb-4">
-                <div class="card-header">Imagem do Produto</div>
-                <div class="card-body">
-                    {% if object and object.imagem %}
-                    <img src="{{ object.imagem.url }}" class="img-fluid mb-3" alt="{{ object.nome }}">
-                    {% endif %}
-                    {{ form.imagem }}
-                </div>
-            </div>
-            
-            <div class="card">
-                <div class="card-header">Ações</div>
-                <div class="card-body">
-                    <button type="submit" class="btn btn-primary btn-block">
-                        <i class="fas fa-save"></i> Salvar
-                    </button>
-                    <a href="{% url 'fornecedores:produto-list' %}" class="btn btn-secondary btn-block">
-                        <i class="fas fa-arrow-left"></i> Cancelar
-                    </a>
-                </div>
-            </div>
-        </div>
+    <div class="form-group">
+        <label for="nome">Nome</label>
+        <input type="text" name="nome" class="form-control" required>
     </div>
+    
+    <div class="form-group">
+        <label for="descricao">Descrição</label>
+        <textarea name="descricao" class="form-control" required></textarea>
+    </div>
+    
+    <div class="form-group">
+        <label for="imagem">Imagem</label>
+        <input type="file" name="imagem" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label for="categoria">Categoria</label>
+        <select name="categoria_id" class="form-control" required>
+            {% for cat in categorias %}
+                <option value="{{ cat.id }}">{{ cat.nome }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="preco">Preço</label>
+        <input type="number" step="0.01" name="preco" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="unidade_venda">Unidade de Venda</label>
+        <select name="unidade_venda" class="form-control" required>
+            <option value="m2">Metro quadrado (m²)</option>
+            <option value="m3">Metro cúbico (m³)</option>
+            <option value="saco">Saco</option>
+            <option value="kg">Quilograma (kg)</option>
+            <option value="unid">Unidade</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="quantidade">Quantidade</label>
+        <input type="number" name="quantidade" class="form-control" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Salvar</button>
 </form>
+</div>
+{% block extra_js %}
+
+<script>
+document.getElementById('produtoForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    const form = new FormData(this);
+
+    const response = await fetch('/api/produtos/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+        },
+        body: form
+    });
+
+    if (response.ok) {
+        alert("Produto adicionado com sucesso!");
+        window.location.href = "{% url 'fornecedores:produto-list' %}";
+    } else {
+        const data = await response.json();
+        alert("Erro ao adicionar produto: " + JSON.stringify(data));
+    }
+});
+</script>
+{% endblock %}
 {% endblock %}s

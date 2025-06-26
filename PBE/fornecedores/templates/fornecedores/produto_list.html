@@ -2,15 +2,16 @@
 
 {% block dashboard_title %}Meus Produtos{% endblock %}
 
-{% block dashboard_actions %}
+
+
+{% block dashboard_content %}
+
 <div class="btn-group mr-2">
-    <a href="{% url 'fornecedores:produto-create' %}" class="btn btn-sm btn-outline-secondary">
+    <a href="{% url 'fornecedores:produto-add' %}" class="btn btn-sm btn-outline-secondary">
         <i class="fas fa-plus"></i> Adicionar Produto
     </a>
 </div>
-{% endblock %}
 
-{% block dashboard_content %}
 <div class="table-responsive">
     <table class="table table-striped table-sm">
         <thead>
@@ -28,10 +29,10 @@
             <tr>
                 <td>{{ produto.nome }}</td>
                 <td>{{ produto.categoria }}</td>
-                <td>R$ {{ produto.preco|floatformat:2 }}</td>
-                <td>{{ produto.estoque }} {{ produto.unidade_medida }}</td>
+                <td>€ {{ produto.preco|floatformat:2 }}</td>
+                <td>{{ produto.quantidade  }} {{ produto.unidade_medida }}</td>
                 <td>
-                    {% if produto.estoque > 0 %}
+                    {% if produto.quantidade > 0 %}
                     <span class="badge badge-success">Disponível</span>
                     {% else %}
                     <span class="badge badge-danger">Esgotado</span>
