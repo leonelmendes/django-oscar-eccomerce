@@ -42,7 +42,7 @@ class ProdutoListView(LoginRequiredMixin, FornecedorRequiredMixin, ListView):
 
 class ProdutoCreateView(LoginRequiredMixin, FornecedorRequiredMixin, CreateView):
     model = Produto
-    fields = ['nome', 'descricao', 'preco', 'categoria', 'unidade_medida', 'estoque', 'imagem']
+    fields = ['nome', 'descricao', 'preco', 'categoria', 'unidade_venda', 'quantidade', 'imagem']
     template_name = 'fornecedores/produto_form.html'
     success_url = reverse_lazy('fornecedores:produto-list')
     
@@ -52,8 +52,8 @@ class ProdutoCreateView(LoginRequiredMixin, FornecedorRequiredMixin, CreateView)
 
 class ProdutoUpdateView(LoginRequiredMixin, FornecedorRequiredMixin, UpdateView):
     model = Produto
-    fields = ['nome', 'descricao', 'preco', 'categoria', 'unidade_medida', 'estoque', 'imagem']
-    template_name = 'fornecedores/produto_form.html'
+    fields = ['nome', 'descricao', 'preco', 'categoria', 'unidade_venda', 'quantidade', 'imagem']
+    template_name = 'fornecedores/produto_edit.html'
     success_url = reverse_lazy('fornecedores:produto-list')
     
     def get_queryset(self):

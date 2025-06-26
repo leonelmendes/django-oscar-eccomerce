@@ -1,0 +1,42 @@
+{% extends "oscar/dashboard/layout.html" %}
+
+{% block title %}Editar Produto{% endblock %}
+
+{% block breadcrumbs %}
+<ul class="breadcrumb">
+    <li><a href="{% url 'dashboard:index' %}">Dashboard</a></li>
+    <li><a href="{% url 'fornecedores:produto-list' %}">Produtos</a></li>
+    <li class="active">Editar Produto</li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h3>Editar Produto</h3>
+    </div>
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data" class="form-horizontal">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            {% for field in form %}
+                <div class="form-group {% if field.errors %}has-error{% endif %}">
+                    <label class="control-label col-sm-2">{{ field.label }}</label>
+                    <div class="col-sm-10">
+                        {{ field }}
+                        {% for error in field.errors %}
+                            <span class="help-block">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                    <a href="{% url 'fornecedores:produto-list' %}" class="btn btn-default">Cancelar</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

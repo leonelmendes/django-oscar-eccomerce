@@ -1,9 +1,13 @@
-{% extends "oscar/dashboard/base.html" %}
-{% block dashboard_content %}
-<h2>Eliminar Produto</h2>
-<p>Tem a certeza que quer eliminar "{{ object }}"?</p>
-<form method="post">{% csrf_token %}
-  <button class="btn btn-danger">Sim, eliminar</button>
-  <a href="{% url 'fornecedores:produto-list' %}" class="btn btn-secondary">Cancelar</a>
-</form>
+{% extends "oscar/dashboard/layout.html" %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Confirmar Remoção</h2>
+  <p>Tens a certeza que deseja apagar o produto <strong>{{ object.nome }}</strong>?</p>
+  <form method="post">
+    {% csrf_token %}
+    <a href="{% url 'fornecedores:produto-list' %}" class="btn btn-secondary">Cancelar</a>
+    <button type="submit" class="btn btn-danger">Sim, apagar</button>
+  </form>
+</div>
 {% endblock %}
