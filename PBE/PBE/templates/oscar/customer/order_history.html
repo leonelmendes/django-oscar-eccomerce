@@ -1,0 +1,24 @@
+{% extends "oscar/base.html" %}
+{% load i18n %}
+
+{% block content %}
+  <h2>{% trans "Meu Histórico de Encomendas" %}</h2>
+  {% if orders %}
+    <ul class="list-group">
+      {% for order in orders %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <div>
+            <strong>{{ order.number }}</strong>
+            <small class="text-muted">({{ order.date_placed }})</small>
+          </div>
+          <span>{{ order.status|capfirst }}</span>
+          <a href="{% url 'customer:order-detail' order.number %}" class="btn btn-sm btn-outline-primary">
+            {% trans "Ver" %}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="text-muted">{% trans "Você ainda não fez nenhuma encomenda." %}</p>
+  {% endif %}
+{% endblock %}

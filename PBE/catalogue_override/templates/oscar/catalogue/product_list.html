@@ -1,0 +1,42 @@
+{% extends "oscar/base.html" %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3">
+            <h4>Categorias</h4>
+            <ul class="nav flex-column">
+                {% for categoria in categories %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">{{ categoria.nome }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-sm-9">
+            <h2>Produtos</h2>
+            <div class="row">
+                {% for produto in products %}
+                    <div class="col-md-4">
+                        <div class="card mb-3">
+                            <img src="{{ produto.imagem.url }}" class="card-img-top" alt="{{ produto.nome }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ produto.nome }}</h5>
+                                <p class="card-text">{{ produto.descricao|truncatechars:100 }}</p>
+                                <p><strong>Preço:</strong> € {{ produto.preco }}</p>
+                                <p>
+                                    <span class="badge {% if produto.quantidade > 0 %}badge-success{% else %}badge-danger{% endif %}">
+                                        {% if produto.quantidade > 0 %} Disponível {% else %} Esgotado {% endif %}
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p>Nenhum produto encontrado.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

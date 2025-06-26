@@ -8,7 +8,8 @@ from .views import (
     ProdutoUpdateView,
     ProdutoDeleteView,
     EncomendaListView,
-    EstatisticasView
+    EstatisticasView,
+    SupplierOrderListView,
 )
 
 app_name = 'fornecedores'
@@ -23,4 +24,5 @@ urlpatterns = [
     path('encomendas/', EncomendaListView.as_view(), name='encomenda-list'),
     path('estatisticas/', EstatisticasView.as_view(), name='estatisticas'),
     path('dashboard/', FornecedorDashboardView.as_view(), name='dashboard'),
+    path('orders/', SupplierOrderListView.as_view(), name='orders'),
 ]

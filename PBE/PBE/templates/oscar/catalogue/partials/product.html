@@ -1,33 +1,19 @@
 {% load static display_tags i18n image_tags reviews_tags %}
 
-
-{% load display_tags %}
-{% load i18n %}
-{% load image_tags %}
-{% load reviews_tags %}
-
 {% block product %}
     <article class="product_pod">
         {% block product_image %}
             <div class="image_container w-100">
                 {% with image=product.primary_image %}
-    {% if image %}
-        {% oscar_thumbnail image.original "x155" upscale=False as thumb %}
-        <a href="{{ product.get_absolute_url }}">
-            <img src="{{ thumb.url }}"
-                 alt="{{ product.get_title }}"
-                 class="img-thumbnail w-auto mx-auto my-0">
-        </a>
-    {% else %}
-        {# Quando não há imagem cadastrada, exibe um placeholder #}
-        <a href="{{ product.get_absolute_url }}">
-            <img src="{% static 'oscar/img/no-image-155x155.png' %}"
-                 alt="{% trans 'No image' %}"
-                 class="img-thumbnail w-auto mx-auto my-0">
-        </a>
-    {% endif %}
-{% endwith %}
-
+                    {% if image and image.original %}
+                        {% oscar_thumbnail image.original "300x300" crop="center" upscale=True as thumb %}
+                        <a href="{{ product.get_absolute_url }}">
+                            <img src="{{ thumb.url }}" alt="{{ product.get_title }}" class="img-thumbnail">
+                        </a>
+                    {% else %}
+                        <img src="{% static 'img/placeholder.png' %}" alt="Sem imagem" width="300" height="300">
+                    {% endif %}
+                {% endwith %}
             </div>
         {% endblock %}
 
@@ -59,5 +45,16 @@
                 {% endif %}
             </div>
         {% endblock %}
+
+        {% if request.user.is_authenticated %}
+            <form action="{% url 'basket:add' product.id %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{ product.id }}">
+                <input type="hidden" name="quantity" value="1">
+                <button type="submit" class="btn btn-primary mt-2">Adicionar ao carrinho</button>
+            </form>
+        {% else %}
+            <p><a href="{% url 'login' %}">Faça login para comprar</a></p>
+        {% endif %}
     </article>
 {% endblock %}

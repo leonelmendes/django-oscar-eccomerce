@@ -1,0 +1,112 @@
+{# <p style="color:red"> Estou no template override!</p> Mensagem de teste para indicar que o template override está funcionando #}
+{% extends "oscar/layout_2_col.html" %}
+
+{% load basket_tags %}
+{% load category_tags %}
+{% load product_tags %}
+{% load i18n %}
+
+{% block title %}
+    {% if summary %}{{ summary }} |{% endif %} {{ block.super }}
+{% endblock %}
+
+{% block headertext %}{{ summary }}{% endblock %}
+
+{% block breadcrumbs %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ homepage_url }}">{% trans "Home" %}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ summary }}</li>
+        </ol>
+    </nav>
+{% endblock breadcrumbs %}
+
+{% block column_left %}
+    {% category_tree as tree_categories %}
+    {% if tree_categories %}
+        <h4>{% trans "Show results for" %}</h4>
+        <div class="side_categories card card-body bg-light">
+            <ul class="nav nav-list flex-column">
+                {% for tree_category in tree_categories %}
+                    <li class="mt-2">
+                        <a href="{{ tree_category.url }}">
+                            {% if tree_category.pk == category.pk %}
+                                <strong>{{ tree_category.name }}</strong>
+                            {% else %}
+                                {{ tree_category.name }}
+                            {% endif %}
+                        </a>
+
+                        {% if tree_category.has_children %}<ul>{% else %}</li>{% endif %}
+                        {% for n in tree_category.num_to_close %}
+                            </ul></li>
+                        {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    {% if has_facets %}
+        <h4>{% trans "Refine by" %}</h4>
+        <div class="side_categories card card-body bg-light">
+            {% for field, data in facet_data.items %}
+                {% if data.results %}
+                    {% include 'oscar/search/partials/facet.html' with name=data.name items=data.results %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-sm-3">
+        <h4>Categorias</h4>
+        <ul class="list-group">
+            {% for categoria in categories %}
+                <li class="list-group-item">
+                    <a href="{% url 'catalogue_override:browse' %}?category={{ categoria.id }}">
+                        {{ categoria.nome }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="col-sm-9">
+        <h2>Produtos</h2>
+        <div class="row">
+            {% for produto in products %}
+                <div class="col-md-4">
+                    <div class="card mb-3">
+                        <img src="{{ produto.imagem.url }}" class="card-img-top" alt="{{ produto.nome }}" style="width: 100%; height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ produto.nome }}</h5>
+                            <p>{{ produto.descricao|truncatewords:15 }}</p>
+                            <p>Preço: €{{ produto.preco }}</p>
+                            <p>
+                                {% if produto.quantidade > 0 %}
+                                    <span class="text-success">Disponível</span>
+                                {% else %}
+                                    <span class="text-danger">Esgotado</span>
+                                {% endif %}
+                            </p>
+                            {% if request.user.is_authenticated %}
+                                <form method="post" action="{% url 'basket:add' produto.id %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="product_id" value="{{ produto.id }}">
+                                    <input type="hidden" name="quantity" value="1">
+                                    <button type="submit" class="btn btn-primary btn-sm">Adicionar ao carrinho</button>
+                                </form>
+                            {% else %}
+                                <p><a href="/accounts/login/">Faça login para comprar</a></p>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p>Nenhum produto encontrado.</p>
+            {% endfor %}
+        </div>
+    </div>
+    
+</div>
+{% endblock %}

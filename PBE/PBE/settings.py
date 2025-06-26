@@ -82,10 +82,11 @@ INSTALLED_APPS = [
     'sorl.thumbnail',   # Default thumbnail backend, can be replaced
     'django_tables2',
     
-     # Apps próprios
+    # Apps próprios
     'users',
     'produtos',
     'fornecedores',
+    'catalogue_override',
 
     # APIs
     'rest_framework',
@@ -131,6 +132,9 @@ OSCAR_DASHBOARD_NAVIGATION = [
 
 SITE_ID = 1
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -161,7 +165,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'templates'),
+            BASE_DIR / 'templates',          # ← nosso “template root”
+            BASE_DIR / 'catalogue_override' / 'templates',
         ],
         'APP_DIRS': True,
         'OPTIONS': {

@@ -17,6 +17,10 @@ Including another URLconf
 from django.apps import apps
 from django.urls import include, path
 from django.contrib import admin
+from catalogue_override import urls as catalogue_urls 
+from django.contrib.auth.views import LoginView
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
      path('i18n/', include('django.conf.urls.i18n')),
@@ -30,5 +34,9 @@ urlpatterns = [
     #path('fornecedor/', include('fornecedores.urls')),
     path('dashboard/fornecedores/', include('fornecedores.urls', namespace='fornecedores')),
     #path('dashboard/', RedirectView.as_view(url='/dashboard/fornecedor/', permanent=False)),
-    path('', include(apps.get_app_config('oscar').urls[0])),
+    path('catalogue/', include(catalogue_urls)),
+    path('', include(apps.get_app_config('oscar').urls[0])),  # Include the main application URLs
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

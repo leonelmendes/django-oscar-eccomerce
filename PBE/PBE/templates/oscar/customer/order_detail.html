@@ -1,0 +1,33 @@
+{% extends "oscar/base.html" %}
+{% load i18n %}
+
+{% block content %}
+  <h2>
+    {% trans "Encomenda" %} {{ order.number }}
+    <small class="text-muted">({{ order.date_placed }})</small>
+  </h2>
+  <p><strong>{% trans "Status:" %}</strong> {{ order.status|capfirst }}</p>
+
+  <h4>{% trans "Itens" %}</h4>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>{% trans "Produto" %}</th>
+        <th>{% trans "Quantidade" %}</th>
+        <th>{% trans "Preço" %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for line in order.lines.all %}
+        <tr>
+          <td>{{ line.product.title }}</td>
+          <td>{{ line.quantity }}</td>
+          <td>{{ line.line_price_excl_tax|currency }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h4>{% trans "Total" %}</h4>
+  <p><strong>{{ order.total_incl_tax|currency }}</strong></p>
+{% endblock %}

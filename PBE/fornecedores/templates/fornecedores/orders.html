@@ -1,0 +1,34 @@
+{% extends "oscar/base.html" %}
+{% load i18n %}
+
+{% block content %}
+  <h2>{% trans "Minhas Encomendas" %}</h2>
+  {% if orders %}
+    <ul class="list-group">
+      {% for order in orders %}
+        <li class="list-group-item mb-3">
+          <h5>
+            {% trans "Encomenda" %} {{ order.number }}
+            — {{ order.status|capfirst }}
+            <small class="text-muted">({{ order.date_placed }})</small>
+          </h5>
+          <ul>
+            {% for line in order.lines.all %}
+              {% if line.product.fornecedor == request.user.fornecedorprofile %}
+                <li>
+                  {{ line.quantity }} × {{ line.product.title }}
+                  — {{ line.line_price_excl_tax|currency }}
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+          <a href="{% url 'customer:order-detail' order.number %}" class="btn btn-sm btn-primary">
+            {% trans "Ver detalhes" %}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="text-muted">{% trans "Ainda não há encomendas para você." %}</p>
+  {% endif %}
+{% endblock %}

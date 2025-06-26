@@ -11,6 +11,24 @@ from .models import Encomenda
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.utils.decorators import method_decorator
 from produtos.models import Categoria
+from oscar.core.loading import get_model
+
+Order = get_model('order', 'Order')
+Line  = get_model('order', 'Line')
+
+class SupplierOrderListView(LoginRequiredMixin, ListView):
+    template_name = 'fornecedores/orders.html'
+    context_object_name = 'orders'
+
+    def get_queryset(self):
+        fornecedor = self.request.user.fornecedorprofile
+        order_ids = (
+            Line.objects
+                .filter(product__fornecedor=fornecedor)
+                .values_list('order_id', flat=True)
+                .distinct()
+        )
+        return Order.objects.filter(id__in=order_ids).prefetch_related('lines')
 
 def fornecedor_required(user):
     return user.is_authenticated and hasattr(user, 'fornecedorprofile')
