@@ -87,6 +87,7 @@ INSTALLED_APPS = [
     'produtos',
     'fornecedores',
     'catalogue_override',
+    'carrinho',
 
     # APIs
     'rest_framework',

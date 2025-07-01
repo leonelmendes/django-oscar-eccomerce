@@ -31,6 +31,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('users.urls')),
     path('api/', include('produtos.urls')),
+    path('carrinho/', include('carrinho.urls', namespace='carrinho')),
     #path('fornecedor/', include('fornecedores.urls')),
     path('dashboard/fornecedores/', include('fornecedores.urls', namespace='fornecedores')),
     #path('dashboard/', RedirectView.as_view(url='/dashboard/fornecedor/', permanent=False)),

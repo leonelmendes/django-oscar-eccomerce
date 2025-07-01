@@ -1,0 +1,63 @@
+{% extends "oscar/layout.html" %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "Basket" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ homepage_url }}">{% trans "Home" %}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{% trans "Basket" %}</li>
+        </ol>
+    </nav>
+{% endblock %}
+
+{# Hide mini-basket so we don't have two baskets to keep in sync #}
+{% block mini_basket %}{% endblock %}
+
+{% block headertext %}
+    {% trans "Carrinho" %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <p>Carrinho contém: {{ carrinho|length }} itens</p>
+    {% if carrinho|length > 0 %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Quantidade</th>
+                    <th>Preço</th>
+                    <th>Subtotal</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in carrinho %}
+                <tr>
+                    <td>{{ item.produto.nome }}</td>
+                    <td>{{ item.quantidade }}</td>
+                    <td>{{ item.produto.preco }} €</td>
+                    <td>{{ item.subtotal }} €</td>
+                    <td>
+                        <a href="{% url 'carrinho:remover' item.produto.id %}" class="btn btn-danger btn-sm">Remover</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <p><strong>Total:</strong> {{ carrinho.get_total }} €</p>
+
+        <form method="post" action="{% url 'carrinho:finalizar-compra' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success">Finalizar Compra</button>
+        </form>
+    {% else %}
+        <p>O carrinho está vazio.</p>
+    {% endif %}
+</div>
+{% endblock %}
