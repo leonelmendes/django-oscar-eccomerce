@@ -14,7 +14,7 @@
     </nav>
 {% endblock %}
 
-{# Hide mini-basket so we don't have two baskets to keep in sync #}
+{# Esconder o mini carrinho#}
 {% block mini_basket %}{% endblock %}
 
 {% block headertext %}
@@ -28,6 +28,7 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th>Imagem</th>
                     <th>Produto</th>
                     <th>Quantidade</th>
                     <th>Preço</th>
@@ -38,6 +39,9 @@
             <tbody>
                 {% for item in carrinho %}
                 <tr>
+                    <td>
+                        <img src="{{ item.produto.imagem.url }}" alt="{{ item.produto.nome }}" style="width: 50%; height: 150px; object-fit: cover;">
+                    </td>
                     <td>{{ item.produto.nome }}</td>
                     <td>{{ item.quantidade }}</td>
                     <td>{{ item.produto.preco }} €</td>

@@ -9,6 +9,7 @@ from fornecedores.models import Encomenda
 
 @login_required
 def adicionar_ao_carrinho(request, produto_id):
+    print("Conteúdo da sessão:", request.session.get('carrinho'))
     carrinho = Carrinho(request)
     carrinho.add(produto_id, quantidade=1)
     return redirect('carrinho:ver-carrinho')

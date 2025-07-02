@@ -30,9 +30,11 @@ class Carrinho:
         self.session.modified = True
 
     def __iter__(self):
-        produto_ids = self.carrinho.keys()
+        produto_ids = map(int, self.carrinho.keys()) 
         produtos = Produto.objects.filter(id__in=produto_ids)
         carrinho = self.carrinho.copy()
+        print("IDs convertidos:", list(produto_ids))
+        print("Produtos encontrados:", list(produtos))
 
         for produto in produtos:
             carrinho[str(produto.id)]['produto'] = produto
@@ -41,8 +43,19 @@ class Carrinho:
             )
             yield carrinho[str(produto.id)]
 
+
     def get_total(self):
         return sum(
             item['produto'].preco * item['quantidade']
             for item in self.__iter__()
+        )
+        
+    def __len__(self):
+        """
+        Retorna o total de itens no carrinho,
+        para que a propriedade`|length` funcione no template.
+        """
+        return sum(
+            item['quantidade']
+            for item in self.carrinho.values()
         )
